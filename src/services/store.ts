@@ -5,6 +5,8 @@ import {
   useSelector as selectorHook
 } from 'react-redux';
 import rootReducer from './reducers';
+import thunk from 'redux-thunk';
+import { composeWithDevTools } from 'redux-devtools-extension';
 import { socketMiddleware } from './middleware/socket-middleware';
 
 import {
@@ -17,8 +19,6 @@ import {
   LIVE_TABLE_WS_ERROR,
   TLiveTableActions
 } from "./reducers/live-table";
-import thunk from 'redux-thunk';
-import { composeWithDevTools } from 'redux-devtools-extension';
 
 const liveTableWsActions = {
   wsConnect: LIVE_TABLE_CONNECT,
