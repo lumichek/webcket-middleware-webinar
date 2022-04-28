@@ -26,7 +26,7 @@ export const socketMiddleware = (wsActions: TWsActionTypes): Middleware<{}, Root
         console.log('connect')
         url = action.payload;
         socket = new WebSocket(url);
-        dispatch({type: wsConnect});
+        dispatch({type: wsConnecting});
       }
 
       if (socket) {
