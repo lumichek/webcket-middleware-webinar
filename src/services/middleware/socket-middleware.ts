@@ -18,13 +18,13 @@ export const socketMiddleware = <M, S>(wsActions: TWsActionTypes<M, S>): Middlew
     let socket: WebSocket | null = null;
     let url = '';
 
-    return next => action => {
+    return (next) => (action) => {
       const { dispatch } = store;
       const { wsConnect, wsDisconnect, wsSendMessage, onOpen,
         onClose, onError, onMessage, wsConnecting } = wsActions;
 
       if (wsConnect.match(action)) {
-        console.log('connect')
+        console.log('connect');
         url = action.payload;
         socket = new WebSocket(url);
         dispatch(wsConnecting());
@@ -36,7 +36,7 @@ export const socketMiddleware = <M, S>(wsActions: TWsActionTypes<M, S>): Middlew
         };
 
         socket.onerror = (error) => {
-          console.log('error')
+          console.log('error');
           dispatch(onError(JSON.stringify(error)));
         };
 
@@ -48,20 +48,20 @@ export const socketMiddleware = <M, S>(wsActions: TWsActionTypes<M, S>): Middlew
 
         socket.onclose = event => {
           if (event.code !== 1000) {
-            console.log('error')
+            console.log('error');
             dispatch(onError(event.code.toString()));
           }
-          console.log('close')
+          console.log('close');
           dispatch(onClose());
         };
 
         if (wsSendMessage && wsSendMessage.match(action)) {
-          console.log('send')
+          console.log('send');
           socket.send(JSON.stringify(action.payload));
         }
 
         if (wsDisconnect.match(action)) {
-          console.log('disconnect')
+          console.log('disconnect');
           socket.close();
           dispatch(onClose());
         }
