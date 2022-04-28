@@ -32,7 +32,7 @@ const liveTableWsActions = {
 
 const liveTableWsMiddleware = socketMiddleware(liveTableWsActions);
 
-const store = createStore(
+export const store = createStore(
   rootReducer,
   composeWithDevTools(
     applyMiddleware(
