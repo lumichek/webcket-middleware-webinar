@@ -2,18 +2,18 @@ import { ActionCreatorWithoutPayload, ActionCreatorWithPayload } from '@reduxjs/
 import { Middleware } from 'redux';
 import { RootState } from '../store';
 
-export type TWsActionTypes<M = any, S = any> = {
-    wsConnect: ActionCreatorWithPayload<string>,
-    wsDisconnect: ActionCreatorWithoutPayload,
-    wsSendMessage?: ActionCreatorWithPayload<S>,
-    wsConnecting: ActionCreatorWithoutPayload,
-    onOpen: ActionCreatorWithoutPayload,
-    onClose: ActionCreatorWithoutPayload,
-    onError: ActionCreatorWithPayload<string>,
-    onMessage: ActionCreatorWithPayload<M>,
+export type TWsActionTypes = {
+  wsConnect: ActionCreatorWithPayload<string>,
+  wsDisconnect: ActionCreatorWithoutPayload,
+  wsSendMessage?: ActionCreatorWithPayload<any>,
+  wsConnecting: ActionCreatorWithoutPayload,
+  onOpen: ActionCreatorWithoutPayload,
+  onClose: ActionCreatorWithoutPayload,
+  onError: ActionCreatorWithPayload<string>,
+  onMessage: ActionCreatorWithPayload<any>
 }
 
-export const socketMiddleware = <M, S>(wsActions: TWsActionTypes<M, S>): Middleware<{}, RootState> => {
+export const socketMiddleware = (wsActions: TWsActionTypes): Middleware<{}, RootState> => {
   return (store) => {
     let socket: WebSocket | null = null;
     let url = '';
