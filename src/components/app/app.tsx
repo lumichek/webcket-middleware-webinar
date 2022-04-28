@@ -4,7 +4,7 @@ import LiveTable from '../live-table/live-table';
 
 import { useDispatch, useSelector } from '../../services/store';
 
-import {connect as connectLiveTable, disconnect as disconnectLiveTable} from '../../services/reducers/live-table';
+import {LIVE_TABLE_CONNECT, LIVE_TABLE_DISCONNECT} from '../../services/reducers/live-table';
 import { WebsocketStatus } from '../../types/live-table';
 
 export const LIVE_TABLE_SERVER_URL = 'ws://localhost:3001';
@@ -14,8 +14,8 @@ const App = () => {
   const { table, status } = useSelector(state => state.liveTable);
   const isDisconnected = status !== WebsocketStatus.OFFLINE;
 
-  const connect = () => dispatch(connectLiveTable(LIVE_TABLE_SERVER_URL));
-  const disconnect = () => dispatch(disconnectLiveTable());
+  const connect = () => dispatch({type: LIVE_TABLE_CONNECT, payload: LIVE_TABLE_SERVER_URL});
+  const disconnect = () => dispatch({type: LIVE_TABLE_DISCONNECT});
 
   let className = 'app__status';
   switch (status) {

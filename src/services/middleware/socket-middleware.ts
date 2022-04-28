@@ -1,19 +1,18 @@
-import { ActionCreatorWithoutPayload, ActionCreatorWithPayload } from '@reduxjs/toolkit';
 import { Middleware } from 'redux';
 import { RootState } from '../store';
 
-export type TWsActionTypes<M = any, S = any> = {
-    wsConnect: ActionCreatorWithPayload<string>,
-    wsDisconnect: ActionCreatorWithoutPayload,
-    wsSendMessage?: ActionCreatorWithPayload<S>,
-    wsConnecting: ActionCreatorWithoutPayload,
-    onOpen: ActionCreatorWithoutPayload,
-    onClose: ActionCreatorWithoutPayload,
-    onError: ActionCreatorWithPayload<string>,
-    onMessage: ActionCreatorWithPayload<M>,
+export type TWsActionTypes = {
+  wsConnect: string,
+  wsDisconnect: string,
+  wsSendMessage?: string,
+  wsConnecting: string,
+  onOpen: string,
+  onClose: string,
+  onError: string,
+  onMessage: string
 }
 
-export const socketMiddleware = <M, S>(wsActions: TWsActionTypes<M, S>): Middleware<{}, RootState> => {
+export const socketMiddleware = (wsActions: TWsActionTypes): Middleware<{}, RootState> => {
   return (store) => {
     let socket: WebSocket | null = null;
     let url = '';
@@ -23,47 +22,47 @@ export const socketMiddleware = <M, S>(wsActions: TWsActionTypes<M, S>): Middlew
       const { wsConnect, wsDisconnect, wsSendMessage, onOpen,
         onClose, onError, onMessage, wsConnecting } = wsActions;
 
-      if (wsConnect.match(action)) {
+      if (wsConnect === action.type) {
         console.log('connect')
         url = action.payload;
         socket = new WebSocket(url);
-        dispatch(wsConnecting());
+        dispatch({type: wsConnect});
       }
 
       if (socket) {
         socket.onopen = () => {
-          dispatch(onOpen());
+          dispatch({type: onOpen});
         };
 
         socket.onerror = (error) => {
           console.log('error')
-          dispatch(onError(JSON.stringify(error)));
+          dispatch({type: onError, payload: JSON.stringify(error)});
         };
 
         socket.onmessage = event => {
           const { data } = event;
           const parsedData = JSON.parse(data);
-          dispatch(onMessage(parsedData));
+          dispatch({type: onMessage, payload: parsedData});
         };
 
         socket.onclose = event => {
           if (event.code !== 1000) {
             console.log('error')
-            dispatch(onError(event.code.toString()));
+            dispatch({type: onError, payload: event.code.toString()});
           }
           console.log('close')
-          dispatch(onClose());
+          dispatch({type: onClose});
         };
 
-        if (wsSendMessage && wsSendMessage.match(action)) {
+        if (wsSendMessage && wsSendMessage === action.type) {
           console.log('send')
           socket.send(JSON.stringify(action.payload));
         }
 
-        if (wsDisconnect.match(action)) {
+        if (wsDisconnect === action.type) {
           console.log('disconnect')
           socket.close();
-          dispatch(onClose());
+          dispatch({type: onClose});
         }
       }
 

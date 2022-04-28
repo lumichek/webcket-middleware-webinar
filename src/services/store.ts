@@ -1,4 +1,4 @@
-import { configureStore } from '@reduxjs/toolkit'
+import { applyMiddleware, createStore } from 'redux';
 import {
   TypedUseSelectorHook,
   useDispatch as dispatchHook,
@@ -8,33 +8,39 @@ import rootReducer from './reducers';
 import { socketMiddleware } from './middleware/socket-middleware';
 
 import {
-  TLiveTableActions,
-  connect as LiveTableWsConnect,
-  disconnect as LiveTableWsDisconnect,
-  wsConnecting as LiveTableWsConnecting,
-  wsOpen as LiveTableWsOpen,
-  wsClose as LiveTableWsClose,
-  wsMessage as LiveTableWsMessage,
-  wsError as LiveTableWsError
+  LIVE_TABLE_CONNECT,
+  LIVE_TABLE_DISCONNECT,
+  LIVE_TABLE_WS_CONNECTING,
+  LIVE_TABLE_WS_OPEN,
+  LIVE_TABLE_WS_CLOSE,
+  LIVE_TABLE_WS_MESSAGE,
+  LIVE_TABLE_WS_ERROR,
+  TLiveTableActions
 } from "./reducers/live-table";
+import thunk from 'redux-thunk';
+import { composeWithDevTools } from 'redux-devtools-extension';
 
-const wsActions = {
-  wsConnect: LiveTableWsConnect,
-  wsDisconnect: LiveTableWsDisconnect,
-  wsConnecting: LiveTableWsConnecting,
-  onOpen: LiveTableWsOpen,
-  onClose: LiveTableWsClose,
-  onError: LiveTableWsError,
-  onMessage: LiveTableWsMessage,
+const liveTableWsActions = {
+  wsConnect: LIVE_TABLE_CONNECT,
+  wsDisconnect: LIVE_TABLE_DISCONNECT,
+  wsConnecting: LIVE_TABLE_WS_CONNECTING,
+  onOpen: LIVE_TABLE_WS_OPEN,
+  onClose: LIVE_TABLE_WS_CLOSE,
+  onError: LIVE_TABLE_WS_ERROR,
+  onMessage: LIVE_TABLE_WS_MESSAGE
 };
 
-const wsMiddleware = socketMiddleware(wsActions);
+const liveTableWsMiddleware = socketMiddleware(liveTableWsActions);
 
-export const store = configureStore({
-  reducer: rootReducer,
-  middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(wsMiddleware)
-});
+const store = createStore(
+  rootReducer,
+  composeWithDevTools(
+    applyMiddleware(
+      thunk,
+      liveTableWsMiddleware
+    )
+  )
+);
 
 export type TApplicationActions = TLiveTableActions;
 
@@ -43,5 +49,3 @@ export type RootState = ReturnType<typeof rootReducer>;
 
 export const useDispatch = () => dispatchHook<AppDispatch>();
 export const useSelector: TypedUseSelectorHook<RootState> = selectorHook;
-
-// export type AppDispatch = ThunkDispatch<RootState, never, TApplicationActions>;
