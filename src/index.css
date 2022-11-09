@@ -62,4 +62,16 @@ code {
 
 .orders {
   list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.order {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+}
+
+.ingredient_image {
+  width: 50px;
 }

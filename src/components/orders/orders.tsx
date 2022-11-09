@@ -8,7 +8,8 @@ export const ORDERS_SERVER_URL = 'wss://norma.nomoreparties.space/orders/all';
 
 const Orders = () => {
   const dispatch = useDispatch();
-  const { data, status } = useSelector(state => state.orders);
+  const { data: orders, status } = useSelector(state => state.orders);
+  const { data: ingredients } = useSelector(state => state.ingredients);
   const isDisconnected = status !== WebsocketStatus.OFFLINE;
 
   const connect = () => dispatch({type: ORDERS_CONNECT, payload: ORDERS_SERVER_URL});
@@ -30,9 +31,9 @@ const Orders = () => {
 
   return (
     <div className='app'>
-      <h3 className='header'>All orders</h3>
+      <h3 className='header'>Orders</h3>
       <p>
-        Orders WS connection status: <span className={className}>{status}</span>
+        WS connection status: <span className={className}>{status}</span>
       </p>
       <div>
         <button className='button button--connect' onClick={connect} disabled={isDisconnected}>Connect</button>
@@ -40,13 +41,21 @@ const Orders = () => {
       </div>
       <ul className='orders'>
         {
-          data.map((order) => (
+          orders.map((order) => (
             <li className='order' key={order._id}>
-              <div className='order_id'></div>
               {order.name}
-              <span className='order_status'>
-                {order.status}
-              </span>
+              <div className='ingredients'>
+                {ingredients
+                  .filter(({_id: id}) => order.ingredients.includes(id))
+                  .map((ingredient) => (
+                    <img
+                      key={ingredient._id}
+                      src={ingredient.image}
+                      className='ingredient_image'
+                      alt='Ing img'
+                    />
+                  ))}
+              </div>
             </li>
           ))
         }

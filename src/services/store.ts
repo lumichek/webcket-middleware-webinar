@@ -5,7 +5,7 @@ import {
   useSelector as selectorHook
 } from 'react-redux';
 import rootReducer from './reducers';
-import thunk from 'redux-thunk';
+import thunk, { ThunkAction, ThunkDispatch } from 'redux-thunk';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import { socketMiddleware } from './middleware/socket-middleware';
 
@@ -19,6 +19,7 @@ import {
   ORDERS_WS_ERROR,
   TOrdersActions
 } from "./reducers/orders";
+import { TGetIngredientsActions } from './reducers/ingredients';
 
 const ordersWsActions = {
   wsConnect: ORDERS_CONNECT,
@@ -42,10 +43,17 @@ export const store = createStore(
   )
 );
 
-export type TApplicationActions = TOrdersActions;
+export type TApplicationActions = TOrdersActions | TGetIngredientsActions;
 
-export type AppDispatch = typeof store.dispatch;
+export type AppDispatch = ThunkDispatch<RootState, never, TApplicationActions>;
 export type RootState = ReturnType<typeof rootReducer>;
+
+export type AppThunk<ReturnType = void> = ThunkAction<
+  ReturnType, // return value type
+  RootState, // app state type
+  never, // extra argument type
+  TApplicationActions // action type
+>;
 
 export const useDispatch = () => dispatchHook<AppDispatch>();
 export const useSelector: TypedUseSelectorHook<RootState> = selectorHook;
