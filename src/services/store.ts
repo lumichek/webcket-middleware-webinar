@@ -10,39 +10,39 @@ import { composeWithDevTools } from 'redux-devtools-extension';
 import { socketMiddleware } from './middleware/socket-middleware';
 
 import {
-  LIVE_TABLE_CONNECT,
-  LIVE_TABLE_DISCONNECT,
-  LIVE_TABLE_WS_CONNECTING,
-  LIVE_TABLE_WS_OPEN,
-  LIVE_TABLE_WS_CLOSE,
-  LIVE_TABLE_WS_MESSAGE,
-  LIVE_TABLE_WS_ERROR,
-  TLiveTableActions
-} from "./reducers/live-table";
+  ORDERS_CONNECT,
+  ORDERS_DISCONNECT,
+  ORDERS_WS_CONNECTING,
+  ORDERS_WS_OPEN,
+  ORDERS_WS_CLOSE,
+  ORDERS_WS_MESSAGE,
+  ORDERS_WS_ERROR,
+  TOrdersActions
+} from "./reducers/orders";
 
-const liveTableWsActions = {
-  wsConnect: LIVE_TABLE_CONNECT,
-  wsDisconnect: LIVE_TABLE_DISCONNECT,
-  wsConnecting: LIVE_TABLE_WS_CONNECTING,
-  onOpen: LIVE_TABLE_WS_OPEN,
-  onClose: LIVE_TABLE_WS_CLOSE,
-  onError: LIVE_TABLE_WS_ERROR,
-  onMessage: LIVE_TABLE_WS_MESSAGE
+const ordersWsActions = {
+  wsConnect: ORDERS_CONNECT,
+  wsDisconnect: ORDERS_DISCONNECT,
+  wsConnecting: ORDERS_WS_CONNECTING,
+  onOpen: ORDERS_WS_OPEN,
+  onClose: ORDERS_WS_CLOSE,
+  onError: ORDERS_WS_ERROR,
+  onMessage: ORDERS_WS_MESSAGE
 };
 
-const liveTableWsMiddleware = socketMiddleware(liveTableWsActions);
+const ordersWsMiddleware = socketMiddleware(ordersWsActions);
 
 export const store = createStore(
   rootReducer,
   composeWithDevTools(
     applyMiddleware(
       thunk,
-      liveTableWsMiddleware
+      ordersWsMiddleware
     )
   )
 );
 
-export type TApplicationActions = TLiveTableActions;
+export type TApplicationActions = TOrdersActions;
 
 export type AppDispatch = typeof store.dispatch;
 export type RootState = ReturnType<typeof rootReducer>;

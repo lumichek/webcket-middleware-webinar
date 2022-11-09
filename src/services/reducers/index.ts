@@ -1,8 +1,8 @@
 import { combineReducers } from "redux";
-import { liveTableReducer } from "./live-table";
+import { ordersReducer } from "./orders";
 
 const reducer = combineReducers({
-  liveTable: liveTableReducer
+  orders: ordersReducer
 });
 
 export default reducer;

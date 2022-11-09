@@ -16,66 +16,50 @@ code {
   margin-left: 20px;
 }
 
-.app__header {
+.header {
   font-size: 24px;
   margin-top: 10px;
   margin-bottom: 15px;
 }
 
-.app__status {
+.status {
   font-weight: bold;
 }
 
-.app__status--online {
+.status--online {
   color: forestgreen;
 }
 
-.app__status--offline {
+.status--offline {
   color: crimson;
 }
 
-.app__status--connecting {
+.status--connecting {
   color: rgb(190, 175, 34);
 }
 
-.app__button {
+.button {
   background-color: aliceblue;
   padding: 5px 20px;
-  border: 2px solid #000000;
-  border-radius: 3px;
   margin-right: 20px;
   margin-bottom: 20px;
+  border: 1px solid #bbbcbc;
+  border-radius: 5px;
   cursor: pointer;
 }
 
-.app__button--connect {
+.button--connect {
   background-color: rgb(144, 223, 170);
 }
 
-.app__button--disconnect {
+.button--disconnect {
   background-color: rgb(206, 132, 129);
 }
 
-.app__button:disabled {
+.button:disabled {
   background-color: #bbbaba;
 }
 
-.live-table {
-  width: 400px;
-  table-layout: fixed;
-}
-
-.live-table,
-.live-table__cell {
-  border-collapse: collapse;
-}
-
-.live-table__cell {
-padding: 5px;
-border: 1px solid #000000;
-}
-
-.live-table__cell--first-column {
-width: 30%;
-text-align: center;
+.orders {
+  list-style: none;
 }

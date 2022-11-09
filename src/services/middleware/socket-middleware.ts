@@ -18,9 +18,17 @@ export const socketMiddleware = (wsActions: TWsActionTypes): Middleware<{}, Root
     let url = '';
 
     return (next) => (action) => {
-      const { dispatch } = store;
-      const { wsConnect, wsDisconnect, wsSendMessage, onOpen,
-        onClose, onError, onMessage, wsConnecting } = wsActions;
+      const {dispatch} = store;
+      const {
+        wsConnect,
+        wsDisconnect,
+        wsSendMessage,
+        onOpen,
+        onClose,
+        onError,
+        onMessage,
+        wsConnecting
+      } = wsActions;
 
       if (wsConnect === action.type) {
         console.log('connect');
